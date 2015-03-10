@@ -1,18 +1,25 @@
 <table>
-    <% @cart.line_items.each do |item| %>
+  <% @cart.line_items.each do |item| %>
       <% if item == @current_item %>
           <tr id="current_item">
       <% else %>
           <tr>
       <% end %>
-          <td><%= item.quantity %>&times;</td>
-          <td><%= item.product.title %></td>
-          <td class="item_price"><%= number_to_currency(item.total_price) %></td>
-        </tr>
-    <% end %>
+      <td>
+        <%= form_for item do |f| %>
+            <%= hidden_field_tag "product_id", item.product.id %>
+            <%= f.submit value: "+" %>
+        <% end %>
+        </td>
+
+      <td><%= item.quantity %>&times;</td>
+      <td><%= item.product.title %></td>
+      <td class="item_price"><%= number_to_currency(item.total_price) %></td>
+      </tr>
+  <% end %>
   <tr class="total_line">
     <td colspan="2">Total</td>
     <td class="total_cell"><%= number_to_currency(@cart.total_price) %></td>
   </tr>
 </table>
-<%= button_to "Empty cart", @cart, method: :delete, data:{ confirm: 'Are you sure?'} %>
+<%= button_to "Empty cart", @cart, method: :delete, data: {confirm: 'Are you sure?'} %>
